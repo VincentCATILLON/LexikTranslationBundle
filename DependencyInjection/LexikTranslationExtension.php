@@ -202,6 +202,10 @@ class LexikTranslationExtension extends Extension
     {
         $folders = array();
         foreach ($dirs as $dir) {
+            $currentDirectory = getcwd();
+            if (false !== strpos($currentDirectory, 'web')){
+                $dir = '../' . $dir;
+            }
             if (is_dir($dir)) {
                 $subDir = scandir($dir);
                 foreach ($subDir as $folder) {

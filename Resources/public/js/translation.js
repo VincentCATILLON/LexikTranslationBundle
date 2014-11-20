@@ -31,6 +31,7 @@ app.controller('TranslationCtrl', [
         $scope.hideColSelector = false;
         $scope.saveMsg = sharedMessage;
         $scope.clients = translationCfg.clients;
+        $scope.bundles = translationCfg.bundles;
 
         // columns definition
         $scope.columns = [
@@ -109,7 +110,7 @@ app.controller('TranslationCtrl', [
 
         // invalidate the cache
         $scope.invalidateCache = function () {
-            $http.get(translationCfg.url.invalidateCache, {headers: {'X-Requested-With': 'XMLHttpRequest'}, params: {'client': $scope.client, 'empty': $scope.empty}})
+            $http.get(translationCfg.url.invalidateCache, {headers: {'X-Requested-With': 'XMLHttpRequest'}, params: {'client': $scope.client, 'empty': $scope.empty, 'bundle': $scope.bundle}})
                 .success(function (responseData) {
                     sharedMessage.set('text-success', 'ok-circle', responseData.message);
                 }
@@ -118,7 +119,7 @@ app.controller('TranslationCtrl', [
         
         // update the select
         $scope.update = function() {
-            var defaultOptions = { page: 1, count: 20, filter: {'client': $scope.client, 'empty': $scope.empty}, sort: {'id': 'asc'} };
+            var defaultOptions = { page: 1, count: 20, filter: {'client': $scope.client, 'empty': $scope.empty, 'bundle': $scope.bundle}, sort: {'id': 'asc'} };
             $scope.tableParams.parameters(defaultOptions);
         };
 }]);

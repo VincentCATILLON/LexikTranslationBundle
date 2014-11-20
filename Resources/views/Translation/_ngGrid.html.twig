@@ -3,12 +3,15 @@
 {% verbatim %}
 <div id="translation-grid" ng-app="translationApp" ng-controller="TranslationCtrl">
     <select ng-model="client" ng-options="client for client in clients" ng-change="update()">
-         <option value="">-- Filtrer par client --</option>
-     </select>
-     <select ng-model="empty" ng-change="update()">
-         <option value="">Tout afficher</option>
-         <option value="true">Traductions manquantes uniquement</option>
-     </select>
+        <option value="">-- Filtrer par client --</option>
+    </select>
+    <select ng-model="bundle" ng-options="bundle for bundle in bundles" ng-change="update()">
+        <option value="">-- Filtrer par bundle --</option>
+    </select>
+    <select ng-model="empty" ng-change="update()">
+        <option value="">Tout afficher</option>
+        <option value="true">Traductions manquantes uniquement</option>
+    </select>
     <div class="row margin-row">
         <div class="col-md-12">
             <a ng-click="hideColSelector = !hideColSelector" class="btn btn-default btn-sm">
