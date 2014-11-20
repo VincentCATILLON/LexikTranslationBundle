@@ -226,6 +226,11 @@ class TransUnitRepository extends EntityRepository
             if (!empty($filters['empty'])) {
                 $builder = $this->addEmptyTranslationFilter($builder, $locales);
             }
+            
+            if (!empty($filters['bundle'])) {
+                $builder->andWhere($builder->expr()->like('tu.bundle', ':bundle'))
+                    ->setParameter('bundle', sprintf('%%%s%%', $filters['bundle']));
+            }
         }
     }
 
