@@ -126,6 +126,23 @@ class DoctrineMongoDBStorage implements StorageInterface
 
         return $this->getTransUnitRepository()->findOneBy($fields);
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getTransUnitByKeyAndDomainAndClient($key, $domain, $client, $bundle)
+    {
+    	$key = mb_substr($key, 0, 255, 'UTF-8');
+    
+    	$fields = array(
+    			'key'    => $key,
+    			'domain' => $domain,
+    			'client' => $client,
+    			'bundle' => $bundle
+    	);
+    
+    	return $this->getTransUnitRepository()->findOneBy($fields);
+    }
 
     /**
      * {@inheritdoc}
@@ -141,6 +158,32 @@ class DoctrineMongoDBStorage implements StorageInterface
     public function getTransUnitsByLocaleAndDomain($locale, $domain)
     {
         return $this->getTransUnitRepository()->getAllByLocaleAndDomain($locale, $domain);
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getTransUnitsByLocaleAndDomainAndClient($locale, $domain, $client) {
+    	$trads = array();
+    	$dbTrads = $this->getTransUnitRepository()->getAllByLocaleAndDomainAndClient($locale, $domain, $client);
+    	$nbTrads = count($dbTrads);
+    	for ($i=0; $i<$nbTrads; $i++) {
+    		$current = $dbTrads[$i];
+    		if ($i<$nbTrads-1) {
+    			$next = $dbTrads[$i+1];
+    			if ($current['key'] == $next['key']) {
+    				$override = ($current['client'] === $client)? $current : $next;
+    				$i++;
+    			} else {
+    				$override = $current;
+    			}
+    			$trads[] = $override;
+    		}
+    		else
+    			$trads[] = $current;
+    	}
+    	return $trads;
+    
     }
 
     /**
