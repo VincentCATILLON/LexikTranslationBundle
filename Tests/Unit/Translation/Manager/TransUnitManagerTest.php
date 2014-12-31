@@ -141,10 +141,6 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $this->assertEquals('bwaaaAaAahhHHh', $translation->getContent());
         $this->assertEquals('en', $translation->getLocale());
 
-        $translation = $manager->addTranslation($transUnit, 'en', 'blebleble', null, true);
-        $this->assertEquals(1, $transUnit->getTranslations()->count());
-        $this->assertNull($translation);
-
         $translation = $manager->addTranslation($transUnit, 'fr', 'bwoOoOohH', null, true);
         $this->assertInstanceOf($class, $translation->getTransUnit());
         $this->assertEquals(2, $transUnit->getTranslations()->count());
@@ -278,6 +274,7 @@ class TransUnitManagerTest extends BaseUnitTestCase
 
         $transUnit = $manager->newInstance();
         $this->assertEquals(ORMUnitOfWork::STATE_NEW, $this->em->getUnitOfWork()->getEntityState($transUnit));
+        
         $this->assertEquals(0, $transUnit->getTranslations()->count());
 
         $transUnit = $manager->newInstance(array('fr', 'en'));

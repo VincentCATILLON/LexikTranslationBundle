@@ -17,8 +17,8 @@ class PhpExporterTest extends \PHPUnit_Framework_TestCase
     {
         $outFile = __DIR__.$this->outFileName;
 
-        if (file_exists(__DIR__.$this->outFileName)) {
-            unlink(__DIR__.$this->outFileName);
+        if (file_exists($outFile)) {
+            unlink($outFile);
         }
     }
 
@@ -38,6 +38,7 @@ class PhpExporterTest extends \PHPUnit_Framework_TestCase
 return array (
 );
 C;
+        
         $this->assertEquals($expectedContent, file_get_contents($outFile));
 
         // export array with values
