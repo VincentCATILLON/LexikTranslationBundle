@@ -18,6 +18,8 @@
         <behavior name="timestampable" />        
         
         <column name="domain" type="varchar" size="255" required="true" default="messages" />
+        <column name="client" type="varchar" size="255" required="true" default="messages" />
+        <column name="bundle" type="varchar" size="255" required="true" default="messages" />
         <column name="key_name" phpName="Key" type="varchar" size="255" required="true" />
         
         <unique>

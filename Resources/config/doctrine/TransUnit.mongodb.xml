@@ -26,7 +26,11 @@
 
         <field fieldName="key" name="key" type="string" />
 
-        <field fieldName="domain" name="domain" type="string" />
+        <field fieldName="domain" name="domain" type="string" />        
+        
+        <field fieldName="client" name="client" type="string" />
+        
+        <field fieldName="bundle" name="bundle" type="string" />
 
         <field fieldName="createdAt" name="created_at" type="timestamp" />
 
