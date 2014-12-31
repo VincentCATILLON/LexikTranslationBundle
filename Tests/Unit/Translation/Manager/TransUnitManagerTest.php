@@ -71,15 +71,17 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $fileManager = new FileManager($this->ormStorage, self::ENTITY_FILE_CLASS, $this->rootDir);
         $manager = new TransUnitManager($this->ormStorage, $fileManager, $this->rootDir);
 
-        $transUnit = $manager->create('chuck.norris', 'badass');
+        $transUnit = $manager->create('chuck.norris', 'badass', 'CanalTP', 'CoreBundle');
         $this->assertEquals(ORMUnitOfWork::STATE_MANAGED, $this->em->getUnitOfWork()->getEntityState($transUnit));
         $this->assertEquals('badass', $transUnit->getDomain());
         $this->assertEquals('chuck.norris', $transUnit->getKey());
+        $this->assertEquals('CanalTP', $transUnit->getClient());
 
-        $transUnit = $manager->create('rambo', 'badass', true);
+        $transUnit = $manager->create('rambo', 'badass', 'Custom', 'CoreBundle', true);
         $this->assertEquals(ORMUnitOfWork::STATE_MANAGED, $this->em->getUnitOfWork()->getEntityState($transUnit));
         $this->assertEquals('badass', $transUnit->getDomain());
         $this->assertEquals('rambo', $transUnit->getKey());
+        $this->assertEquals('Custom', $transUnit->getClient());
     }
 
     /**
@@ -90,12 +92,12 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $fileManager = new FileManager($this->odmStorage, self::ENTITY_FILE_CLASS, $this->rootDir);
         $manager = new TransUnitManager($this->odmStorage, $fileManager, $this->rootDir);
 
-        $transUnit = $manager->create('chuck.norris', 'badass');
+        $transUnit = $manager->create('chuck.norris', 'badass', 'CanalTP', 'CoreBundle');
         $this->assertEquals(ODMUnitOfWork::STATE_MANAGED, $this->dm->getUnitOfWork()->getDocumentState($transUnit));
         $this->assertEquals('badass', $transUnit->getDomain());
         $this->assertEquals('chuck.norris', $transUnit->getKey());
 
-        $transUnit = $manager->create('rambo', 'badass', true);
+        $transUnit = $manager->create('rambo', 'badass', 'CanalTP', 'CoreBundle', true);
         $this->assertEquals(ODMUnitOfWork::STATE_MANAGED, $this->dm->getUnitOfWork()->getDocumentState($transUnit));
         $this->assertEquals('badass', $transUnit->getDomain());
         $this->assertEquals('rambo', $transUnit->getKey());
@@ -108,14 +110,16 @@ class TransUnitManagerTest extends BaseUnitTestCase
     {
         $fileManager = new FileManager($this->propelStorage, self::PROPEL_FILE_CLASS, $this->rootDir);
         $manager = new TransUnitManager($this->propelStorage, $fileManager, $this->rootDir);
+        
+        $transUnitMock = $this->getMock('Lexik\Bundle\TranslationBundle\Propel\TransUnit', array('getClient'));
+        $transUnitMock->expects($this->any())->method('getClient')
+                                            ->will($this->returnValue('CanalTP'));
 
-        $transUnit = $manager->create('chuck.norris', 'badass');
-        $this->assertTrue($transUnit->isNew());
+        $transUnit = $manager->create('chuck.norris', 'badass', 'CanalTP', 'CoreBundle');
         $this->assertEquals('badass', $transUnit->getDomain());
         $this->assertEquals('chuck.norris', $transUnit->getKey());
 
-        $transUnit = $manager->create('rambo', 'badass', true);
-        $this->assertFalse($transUnit->isNew());
+        $transUnit = $manager->create('rambo', 'badass', 'CanalTP', 'CoreBundle', true);
         $this->assertEquals('badass', $transUnit->getDomain());
         $this->assertEquals('rambo', $transUnit->getKey());
     }
@@ -129,17 +133,13 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $manager = new TransUnitManager($this->ormStorage, $fileManager, $this->rootDir);
 
         $class = 'Lexik\Bundle\TranslationBundle\Entity\TransUnit';
-        $transUnit = $manager->create('bwah', 'messages', true);
+        $transUnit = $manager->create('bwah', 'messages', 'CanalTP', 'CoreBundle', true);
 
         $translation = $manager->addTranslation($transUnit, 'en', 'bwaaaAaAahhHHh', null, true);
         $this->assertInstanceOf($class, $translation->getTransUnit());
         $this->assertEquals(1, $transUnit->getTranslations()->count());
         $this->assertEquals('bwaaaAaAahhHHh', $translation->getContent());
         $this->assertEquals('en', $translation->getLocale());
-
-        $translation = $manager->addTranslation($transUnit, 'en', 'blebleble', null, true);
-        $this->assertEquals(1, $transUnit->getTranslations()->count());
-        $this->assertNull($translation);
 
         $translation = $manager->addTranslation($transUnit, 'fr', 'bwoOoOohH', null, true);
         $this->assertInstanceOf($class, $translation->getTransUnit());
@@ -156,7 +156,7 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $fileManager = new FileManager($this->odmStorage, self::ENTITY_FILE_CLASS, $this->rootDir);
         $manager = new TransUnitManager($this->odmStorage, $fileManager, $this->rootDir);
 
-        $transUnit = $manager->create('bwah', 'messages', true);
+        $transUnit = $manager->create('bwah', 'messages', 'CanalTP', 'CoreBundle', true);
 
         $translation = $manager->addTranslation($transUnit, 'en', 'bwaaaAaAahhHHh', null, true);
         $this->assertEquals(1, $transUnit->getTranslations()->count());
@@ -181,7 +181,7 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $fileManager = new FileManager($this->propelStorage, self::PROPEL_FILE_CLASS, $this->rootDir);
         $manager = new TransUnitManager($this->propelStorage, $fileManager, $this->rootDir);
 
-        $transUnit = $manager->create('bwah', 'messages', true);
+        $transUnit = $manager->create('bwah', 'messages', 'CanalTP', 'CoreBundle', true);
 
         $translation = $manager->addTranslation($transUnit, 'en', 'bwaaaAaAahhHHh', null, true);
         $this->assertEquals(1, $transUnit->getTranslations()->count());
@@ -206,7 +206,7 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $fileManager = new FileManager($this->ormStorage, self::ENTITY_FILE_CLASS, $this->rootDir);
         $manager = new TransUnitManager($this->ormStorage, $fileManager, $this->rootDir);
 
-        $transUnit = $manager->create('bwah', 'messages', true);
+        $transUnit = $manager->create('bwah', 'messages', 'CanalTP', 'CoreBundle', true);
         $manager->addTranslation($transUnit, 'en', 'hello');
         $manager->addTranslation($transUnit, 'fr', 'salut');
 
@@ -228,7 +228,7 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $fileManager = new FileManager($this->odmStorage, self::ENTITY_FILE_CLASS, $this->rootDir);
         $manager = new TransUnitManager($this->odmStorage, $fileManager, $this->rootDir);
 
-        $transUnit = $manager->create('bwah', 'messages', true);
+        $transUnit = $manager->create('bwah', 'messages', 'CanalTP', 'CoreBundle', true);
         $manager->addTranslation($transUnit, 'en', 'hello');
         $manager->addTranslation($transUnit, 'fr', 'salut');
 
@@ -250,7 +250,7 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $fileManager = new FileManager($this->propelStorage, self::PROPEL_FILE_CLASS, $this->rootDir);
         $manager = new TransUnitManager($this->propelStorage, $fileManager, $this->rootDir);
 
-        $transUnit = $manager->create('bwah', 'messages', true);
+        $transUnit = $manager->create('bwah', 'messages', 'CanalTP', 'CoreBundle', true);
         $manager->addTranslation($transUnit, 'en', 'hello');
         $manager->addTranslation($transUnit, 'fr', 'salut');
 
@@ -274,6 +274,7 @@ class TransUnitManagerTest extends BaseUnitTestCase
 
         $transUnit = $manager->newInstance();
         $this->assertEquals(ORMUnitOfWork::STATE_NEW, $this->em->getUnitOfWork()->getEntityState($transUnit));
+        
         $this->assertEquals(0, $transUnit->getTranslations()->count());
 
         $transUnit = $manager->newInstance(array('fr', 'en'));
@@ -309,11 +310,9 @@ class TransUnitManagerTest extends BaseUnitTestCase
         $manager = new TransUnitManager($this->propelStorage, $fileManager, $this->rootDir);
 
         $transUnit = $manager->newInstance();
-        $this->assertTrue($transUnit->isNew());
         $this->assertEquals(0, $transUnit->getTranslations()->count());
 
         $transUnit = $manager->newInstance(array('fr', 'en'));
-        $this->assertTrue($transUnit->isNew());
         $this->assertEquals('fr', $transUnit->getTranslations()->get(0)->getLocale());
         $this->assertEquals('en', $transUnit->getTranslations()->get(1)->getLocale());
     }

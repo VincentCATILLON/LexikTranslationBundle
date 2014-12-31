@@ -147,21 +147,21 @@ class FileManagerTest extends BaseUnitTestCase
         $manager = new FileManager($this->ormStorage, $this->rootDir);
 
         $total = count($repository->findAll());
-        $this->assertEquals(5, $total);
+        $this->assertEquals(6, $total);
 
         // get an existing file
         $file = $manager->getFor('superTranslations.de.yml', '/test/root/dir/app/Resources/translations');
         $this->em->flush();
 
         $total = count($repository->findAll());
-        $this->assertEquals(5, $total);
+        $this->assertEquals(7, $total);
 
         // get a new file
         $file = $manager->getFor('superTranslations.it.yml', '/test/root/dir/app/Resources/translations');
         $this->em->flush();
 
         $total = count($repository->findAll());
-        $this->assertEquals(6, $total);
+        $this->assertEquals(8, $total);
     }
 
     /**
@@ -173,21 +173,21 @@ class FileManagerTest extends BaseUnitTestCase
         $manager = new FileManager($this->odmStorage, $this->rootDir);
 
         $total = count($repository->findAll());
-        $this->assertEquals(5, $total);
+        $this->assertEquals(6, $total);
 
         // get an existing file
         $file = $manager->getFor('superTranslations.de.yml', '/test/root/dir/app/Resources/translations');
         $this->dm->flush();
 
         $total = count($repository->findAll());
-        $this->assertEquals(5, $total);
+        $this->assertEquals(7, $total);
 
         // get a new file
         $file = $manager->getFor('superTranslations.it.yml', '/test/root/dir/app/Resources/translations');
         $this->dm->flush();
 
         $total = count($repository->findAll());
-        $this->assertEquals(6, $total);
+        $this->assertEquals(8, $total);
     }
 
     /**
@@ -205,13 +205,13 @@ class FileManagerTest extends BaseUnitTestCase
         $file->save();
 
         $total = FileQuery::create()->count();
-        $this->assertEquals(5, $total);
+        $this->assertEquals(6, $total);
 
         // get a new file
         $file = $manager->getFor('superTranslations.it.yml', '/test/root/dir/app/Resources/translations');
         $file->save();
 
         $total = FileQuery::create()->count();
-        $this->assertEquals(6, $total);
+        $this->assertEquals(7, $total);
     }
 }

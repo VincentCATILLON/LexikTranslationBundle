@@ -47,7 +47,7 @@ class FileImporterTest extends BaseUnitTestCase
         );
 
         foreach ($files as $file) {
-            $importer->import($file);
+            $importer->import($file, 'CanalTP', 'CoreBundle');
         }
 
         $this->assertDatabaseEntries($em, 2);

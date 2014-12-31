@@ -168,11 +168,15 @@ FCT;
             ->limit($rows)
             ->getQuery()
             ->execute();
+        
+
+
+        
 
         $ids = array();
         foreach ($results as $result) {
             $ids[] = $result['_id'];
-        }
+        } 
 
         $transUnits = array();
 
