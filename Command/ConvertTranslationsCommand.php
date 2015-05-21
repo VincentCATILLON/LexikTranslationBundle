@@ -123,7 +123,13 @@ class ConvertTranslationsCommand extends ContainerAwareCommand
             $this->output->writeln(sprintf('<info>Path "%s" ...</info>', $path));
             foreach ($domains as $domain => $translations) {
                 $file = $this->getTranslationsFileName($path, $domain);
-                $translations = array_replace_recursive($this->getYamlTranslations($file), $translations);
+                switch ($this->values['output']) {
+                    case 'yml':
+                        $translations = array_replace_recursive($this->getYamlTranslations($file), $translations);
+                        break;
+                    default:
+                        throw new IOException(sprintf('Output format not supported : "%s"', strtoupper($this->values['output'])));
+                }
                 $this->writeTranslations($path, $domain, $translations);
             }
         }
